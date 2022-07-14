@@ -10,10 +10,10 @@ interface UserData {
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }])
-  const { data, isSuccess, isError } = trpc.useQuery(['auth.getSession'])
-  const { name, image, email } = data?.user as UserData
+  const { data, isSuccess, isError, isLoading } = trpc.useQuery(['auth.getSession'])
+  const { name, image, email } = (data?.user as UserData) ?? {}
 
-  if (isSuccess) {
+  if (isSuccess && name) {
     return (
       <>
         Signed in as {name} <br />
@@ -21,11 +21,22 @@ const Home: NextPage = () => {
       </>
     )
   }
+
+  if (isLoading) {
+    return (
+      <div className='flex justify-center h-screen flex-col'>
+        <h1 className='text-center font-bold text-2xl'>Loading ...</h1>
+      </div>
+    )
+  }
+
   return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn('discord')}>Sign in</button>
-    </>
+    <div className='flex justify-center h-screen flex-col'>
+      <h1 className='text-center font-bold text-2xl'>Music Club</h1>
+      <button onClick={() => signIn('discord')} className='btn btn-primary place-self-center  m-8'>
+        Sign in
+      </button>
+    </div>
   )
 }
 
