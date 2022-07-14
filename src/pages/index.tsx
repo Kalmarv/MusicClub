@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   if (isSuccess && name) {
     return (
       <>
-        <Header name={name} />
+        <Header name={name} picture={image} />
       </>
     )
   }
