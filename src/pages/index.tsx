@@ -1,14 +1,22 @@
 import type { NextPage } from 'next'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 import { trpc } from '../utils/trpc'
+
+interface UserData {
+  email: string
+  image: string
+  name: string
+}
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }])
-  const { data: session } = useSession()
-  if (session?.user?.email) {
+  const { data, isSuccess, isError } = trpc.useQuery(['auth.getSession'])
+  const { name, image, email } = data?.user as UserData
+
+  if (isSuccess) {
     return (
       <>
-        Signed in as {session.user.email} <br />
+        Signed in as {name} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     )
