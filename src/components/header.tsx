@@ -12,7 +12,7 @@ const Header: React.FC<{ name: string; picture: string }> = ({ name, picture }) 
           className='rounded-full w-full h-full border-secondary border-4'
         />
       </div>
-      <button onClick={() => signOut()} className='m-4 btn-ghost btn btn-sm'>
+      <button onClick={() => signOut()} className='my-4 mr-4 btn-ghost btn btn-sm'>
         Sign out
       </button>
     </div>

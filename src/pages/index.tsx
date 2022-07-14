@@ -14,6 +14,8 @@ const Home: NextPage = () => {
   const { data, isSuccess, isError, isLoading } = trpc.useQuery(['auth.getSession'])
   const { name, image, email } = (data?.user as UserData) ?? {}
 
+  console.log(data)
+
   if (isSuccess && name) {
     return (
       <>
