@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import { signIn, signOut } from 'next-auth/react'
+import Header from '../components/header'
 import { trpc } from '../utils/trpc'
 
 interface UserData {
@@ -16,8 +17,7 @@ const Home: NextPage = () => {
   if (isSuccess && name) {
     return (
       <>
-        Signed in as {name} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <Header name={name} />
       </>
     )
   }
