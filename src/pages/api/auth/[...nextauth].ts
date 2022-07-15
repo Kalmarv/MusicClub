@@ -13,8 +13,6 @@ export const authOptions: NextAuthOptions = {
     SpotifyProvider({
       clientId: env.SPOTIFY_CLIENT_ID,
       clientSecret: env.SPOTIFY_CLIENT_SECRET,
-      // authorization:
-      //   'https://accounts.spotify.com/authorize?scope=user-read-email+user-read-recently-played+user-read-playback-position+user-read-playback-state+user-read-currently-playing',
     }),
   ],
   callbacks: {
@@ -22,7 +20,6 @@ export const authOptions: NextAuthOptions = {
       return { ...session, id: user.id }
     },
   },
-  debug: true,
 }
 
 export default NextAuth(authOptions)
