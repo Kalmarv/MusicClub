@@ -1,3 +1,13 @@
+export interface UserData {
+  expires: string
+  id: string
+  user: {
+    email: string
+    image: string
+    name: string
+  }
+}
+
 export interface Root {
   albums: Albums
 }

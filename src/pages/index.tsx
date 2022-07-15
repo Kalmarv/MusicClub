@@ -2,18 +2,8 @@ import type { NextPage } from 'next'
 import { signIn, signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import Header from '../components/header'
-import { Albums, Item, Root } from '../types'
+import { Albums, Item, Root, UserData } from '../types'
 import { trpc } from '../utils/trpc'
-
-interface UserData {
-  expires: string
-  id: string
-  user: {
-    email: string
-    image: string
-    name: string
-  }
-}
 
 const Home: NextPage = () => {
   const { data, isSuccess, isError, isLoading } = trpc.useQuery(['auth.getSession'])
