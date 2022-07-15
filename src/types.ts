@@ -60,3 +60,12 @@ export interface Image {
   url: string
   width: number
 }
+
+export interface SpotifyError {
+  error: Error
+}
+
+export interface Error {
+  status: number
+  message: string
+}

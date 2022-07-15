@@ -1,6 +1,7 @@
 import { createRouter } from './context'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
+import { getAccessToken } from '../../utils/getAccessToken'
 
 export const spotifyRouter = createRouter()
   .middleware(async ({ ctx, next }) => {
@@ -11,20 +12,21 @@ export const spotifyRouter = createRouter()
     }
     return next()
   })
-  .query('getSpotifyToken', {
+  .query('getSongs', {
     input: z.object({
-      id: z.string(),
+      searchParam: z.string().min(1),
     }),
-    async resolve({ ctx: { prisma, session }, input }) {
-      return await prisma.account.findFirst({
-        where: { userId: input.id },
-        select: {
-          id: true,
-          scope: true,
-          providerAccountId: true,
-          refresh_token: true,
-          access_token: true,
-        },
-      })
+    async resolve({ input }) {
+      const { access_token } = await getAccessToken()
+      const albums = await fetch(
+        `https://api.spotify.com/v1/search?type=album&include_external=audio&limit=5&q=${input.searchParam}`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      return await albums.json()
     },
   })
