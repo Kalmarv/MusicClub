@@ -34,7 +34,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
             <div className='w-14 h-14 m-2'>
               <div className='relative aspect-square'>
                 <Image
-                  src={userData?.image as string}
+                  src={(userData?.image as string) ?? '/profile-placeholder.png'}
                   alt='User who added'
                   layout='fill'
                   className='rounded-full'
