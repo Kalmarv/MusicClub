@@ -3,7 +3,7 @@ import { signIn, signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import AddAlbum from '../components/add-album'
 import Header from '../components/header'
-import { Albums, Item, Root, UserData } from '../types'
+import { Albums, AlbumItem, Root, UserData } from '../types'
 import { trpc } from '../utils/trpc'
 
 const Home: NextPage = () => {

@@ -12,7 +12,7 @@ export const spotifyRouter = createRouter()
     }
     return next()
   })
-  .query('getSongs', {
+  .mutation('getSongs', {
     input: z.object({
       searchParam: z.string().min(1),
     }),
