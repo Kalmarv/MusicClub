@@ -61,8 +61,9 @@ model VerificationToken {
 }
 
 model Album {
-    id        String @id @default(cuid())
-    spotifyId String @unique
+    date      DateTime @default(now())
+    id        String   @id @default(cuid())
+    spotifyId String   @unique
     userId    String
-    addedBy   User   @relation(fields: [userId], references: [id])
+    addedBy   User     @relation(fields: [userId], references: [id])
 }
