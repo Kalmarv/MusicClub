@@ -33,7 +33,7 @@ const AddAlbum = () => {
 
   return (
     <>
-      <label htmlFor='my-modal' className='btn btn-secondary mx-4'>
+      <label htmlFor='my-modal' className='btn btn-secondary mx-8'>
         Add Album
       </label>
       <input

@@ -144,7 +144,7 @@ export interface Image {
 
 export interface Tracks {
   href: string
-  items: Item[]
+  items: AlbumTrack[]
   limit: number
   next: any
   offset: number
@@ -152,7 +152,7 @@ export interface Tracks {
   total: number
 }
 
-export interface Item {
+export interface AlbumTrack {
   artists: Artist2[]
   available_markets: string[]
   disc_number: number

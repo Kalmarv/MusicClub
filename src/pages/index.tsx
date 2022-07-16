@@ -20,14 +20,16 @@ const Home: NextPage = () => {
       <>
         <Header name={name} picture={image} />
         <AddAlbum />
-        <div className='grid gap-8 mt-8'>
-          {userAlbums &&
-            userAlbums.length > 0 &&
-            userAlbums
-              .sort((a, b) => Number(b.date) - Number(a.date))
-              .map((album) => (
-                <AlbumCard key={album.id} id={album.spotifyId} user={album.userId} />
-              ))}
+        <div className='flex flex-row place-content-center'>
+          <div className='grid gap-8 my-8 w-full max-w-lg md:max-w-5xl md:grid-cols-2'>
+            {userAlbums &&
+              userAlbums.length > 0 &&
+              userAlbums
+                .sort((a, b) => Number(b.date) - Number(a.date))
+                .map((album) => (
+                  <AlbumCard key={album.id} id={album.spotifyId} user={album.userId} />
+                ))}
+          </div>
         </div>
       </>
     )
