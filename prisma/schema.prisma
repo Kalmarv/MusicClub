@@ -49,6 +49,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    addedAlbums   Album[]
 }
 
 model VerificationToken {
@@ -57,4 +58,11 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Album {
+    id        String @id @default(cuid())
+    spotifyId String @unique
+    userId    String
+    addedBy   User   @relation(fields: [userId], references: [id])
 }
