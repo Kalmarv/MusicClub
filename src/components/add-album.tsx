@@ -6,6 +6,7 @@ import Image from 'next/image'
 const AddAlbum = () => {
   const { invalidateQueries } = trpc.useContext()
   const [albums, setAlbums] = useState<AlbumItem[]>()
+  const [tracks, setAlbumTracks] = useState<string[]>()
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const addAlbumToDb = trpc.useMutation(['spotify.addAlbum'], {
@@ -14,6 +15,10 @@ const AddAlbum = () => {
 
   const albumResults = trpc.useMutation(['spotify.getSongs'], {
     onSuccess: (data) => setAlbums(data.albums.items),
+  })
+
+  const albumTracks = trpc.useMutation(['spotify.getAlbumMutation'], {
+    onSuccess: (data) => setAlbumTracks(data.tracks.items.map((t: any) => t.id)),
   })
 
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +32,10 @@ const AddAlbum = () => {
   }
 
   const addAlbum = async (album: AlbumItem) => {
-    addAlbumToDb.mutate({ spotifyId: album.id })
+    const trackListing = await albumTracks.mutateAsync({ id: album.id })
+    const tracks = trackListing.tracks.items.map((t: any) => t.id)
+    console.log(tracks)
+    addAlbumToDb.mutate({ spotifyId: album.id, tracks: tracks })
     setModalIsOpen(false)
   }
 

@@ -43,16 +43,40 @@ export const spotifyRouter = createRouter()
       return await album.json()
     },
   })
+  .mutation('getAlbumMutation', {
+    input: z.object({
+      id: z.string().min(1),
+    }),
+    async resolve({ input }) {
+      const { access_token } = await getAccessToken()
+      const album = await fetch(`https://api.spotify.com/v1/albums/${input.id}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      return await album.json()
+    },
+  })
   .mutation('addAlbum', {
     input: z.object({
       spotifyId: z.string().min(1),
+      tracks: z.array(z.string().min(1)).min(1),
     }),
     async resolve({ ctx: { prisma, session }, input }) {
-      return await prisma.album.create({
+      await prisma.album.create({
         data: {
           spotifyId: input.spotifyId,
           userId: session?.id as string,
         },
       })
+
+      await prisma.track.createMany({
+        data: input.tracks.map((track) => ({
+          trackId: track as string,
+        })),
+      })
+
+      return
     },
   })

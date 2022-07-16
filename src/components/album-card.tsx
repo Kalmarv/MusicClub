@@ -45,6 +45,9 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
           {albumData.tracks.items.map((track: AlbumTrack) => (
             <div key={track.id}>
               <p>{track.name}</p>
+              <button className='btn btn-small btn-primary' onClick={() => console.log(track.id)}>
+                ♥
+              </button>
             </div>
           ))}
         </div>

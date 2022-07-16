@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
-import { signIn, signOut } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { signIn } from 'next-auth/react'
 import AddAlbum from '../components/add-album'
 import AlbumCard from '../components/album-card'
 import Header from '../components/header'
-import { Albums, AlbumItem, Root, UserData } from '../types'
+import { UserData } from '../types'
 import { trpc } from '../utils/trpc'
 
 const Home: NextPage = () => {

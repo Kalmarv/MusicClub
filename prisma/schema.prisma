@@ -50,6 +50,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     addedAlbums   Album[]
+    favTracks     Track[]
 }
 
 model VerificationToken {
@@ -66,4 +67,11 @@ model Album {
     spotifyId String   @unique
     userId    String
     addedBy   User     @relation(fields: [userId], references: [id])
+}
+
+model Track {
+    id      String  @id @default(cuid())
+    trackId String  @unique
+    userId  String?
+    favBy   User?   @relation(fields: [userId], references: [id])
 }
