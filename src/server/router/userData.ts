@@ -45,3 +45,20 @@ export const userDataRouter = createRouter()
       })
     },
   })
+  .mutation('unFavoriteTrack', {
+    input: z.object({
+      trackId: z.string(),
+    }),
+    async resolve({ ctx: { prisma, session }, input }) {
+      return await prisma.user.update({
+        where: { id: session?.id as string },
+        data: {
+          favTracks: {
+            disconnect: {
+              id: input.trackId,
+            },
+          },
+        },
+      })
+    },
+  })

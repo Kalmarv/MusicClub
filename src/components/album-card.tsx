@@ -18,6 +18,9 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
   const favoriteSong = trpc.useMutation(['userData.favoriteTrack'], {
     onSuccess: () => invalidateQueries(['userData.getAlbumSongs']),
   })
+  const unFavoriteSong = trpc.useMutation(['userData.unFavoriteTrack'], {
+    onSuccess: () => invalidateQueries(['userData.getAlbumSongs']),
+  })
 
   console.log(songData)
 
@@ -64,11 +67,15 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                 <p>{track.name}</p>
                 <button
                   onClick={() => {
-                    favoriteSong.mutate({ trackId: track.id })
+                    track?.userId === userData?.id
+                      ? unFavoriteSong.mutate({ trackId: track.id })
+                      : favoriteSong.mutate({ trackId: track.id })
                   }}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    className='h-6 w-6 fill-primary'
+                    className={`h-6 w-6 ${
+                      track?.userId === userData?.id ? 'fill-primary' : 'fill-transparent'
+                    }`}
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
