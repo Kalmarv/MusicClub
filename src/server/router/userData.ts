@@ -28,3 +28,20 @@ export const userDataRouter = createRouter()
       })
     },
   })
+  .mutation('favoriteTrack', {
+    input: z.object({
+      trackId: z.string(),
+    }),
+    async resolve({ ctx: { prisma, session }, input }) {
+      return await prisma.user.update({
+        where: { id: session?.id as string },
+        data: {
+          favTracks: {
+            connect: {
+              id: input.trackId,
+            },
+          },
+        },
+      })
+    },
+  })
