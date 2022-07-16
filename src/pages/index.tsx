@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import { signIn, signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import AddAlbum from '../components/add-album'
+import AlbumCard from '../components/album-card'
 import Header from '../components/header'
 import { Albums, AlbumItem, Root, UserData } from '../types'
 import { trpc } from '../utils/trpc'
@@ -18,6 +19,8 @@ const Home: NextPage = () => {
       <>
         <Header name={name} picture={image} />
         <AddAlbum />
+        <AlbumCard id={'1ERrUvG31thFCxdwWUoJrY'} expanded={true} />
+        <AlbumCard id={'1ERrUvG31thFCxdwWUoJrY'} />
       </>
     )
   }

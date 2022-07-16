@@ -5,8 +5,6 @@ import { getAccessToken } from '../../utils/getAccessToken'
 
 export const spotifyRouter = createRouter()
   .middleware(async ({ ctx, next }) => {
-    // Any queries or mutations after this middleware will
-    // raise an error unless there is a current session
     if (!ctx.session) {
       throw new TRPCError({ code: 'UNAUTHORIZED' })
     }
@@ -28,5 +26,20 @@ export const spotifyRouter = createRouter()
         }
       )
       return await albums.json()
+    },
+  })
+  .query('getAlbum', {
+    input: z.object({
+      id: z.string().min(1),
+    }),
+    async resolve({ input }) {
+      const { access_token } = await getAccessToken()
+      const album = await fetch(`https://api.spotify.com/v1/albums/${input.id}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      return await album.json()
     },
   })
