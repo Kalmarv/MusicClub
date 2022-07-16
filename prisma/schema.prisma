@@ -67,5 +67,6 @@ model Track {
     spotifyID String
     fav       User?   @relation(fields: [userId], references: [id])
     albumId   String
+    name      String
     userId    String?
 }

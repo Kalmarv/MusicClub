@@ -61,11 +61,19 @@ export const spotifyRouter = createRouter()
   .mutation('addAlbum', {
     input: z.object({
       spotifyId: z.string().min(1),
-      tracks: z.array(z.string().min(1)).min(1),
+      tracks: z
+        .array(
+          z.object({
+            id: z.string().min(1),
+            name: z.string().min(1),
+          })
+        )
+        .min(1),
     }),
     async resolve({ ctx: { prisma, session }, input }) {
       const trackData = input.tracks.map((track) => ({
-        spotifyID: track,
+        spotifyID: track.id,
+        name: track.name,
       }))
 
       await prisma.album.create({

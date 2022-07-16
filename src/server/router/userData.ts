@@ -17,3 +17,14 @@ export const userDataRouter = createRouter()
       })
     },
   })
+  .query('getAlbumSongs', {
+    input: z.object({
+      albumId: z.string(),
+    }),
+    async resolve({ ctx: { prisma }, input }) {
+      return await prisma.album.findUnique({
+        where: { spotifyId: input.albumId },
+        select: { tracks: true },
+      })
+    },
+  })

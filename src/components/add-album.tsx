@@ -33,8 +33,10 @@ const AddAlbum = () => {
 
   const addAlbum = async (album: AlbumItem) => {
     const trackListing = await albumTracks.mutateAsync({ id: album.id })
-    const tracks = trackListing.tracks.items.map((t: any) => t.id)
-    console.log(tracks)
+    const tracks = trackListing.tracks.items.map((t: any) => ({
+      id: t.id,
+      name: t.name,
+    }))
     addAlbumToDb.mutate({ spotifyId: album.id, tracks: tracks })
     setModalIsOpen(false)
   }

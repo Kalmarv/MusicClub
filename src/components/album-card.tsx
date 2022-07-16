@@ -4,6 +4,13 @@ import { trpc } from '../utils/trpc'
 
 const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
   const { data: albumData, isSuccess: albumIsSuccess } = trpc.useQuery(['spotify.getAlbum', { id }])
+  const { data: songData, isSuccess: songIsSuccess } = trpc.useQuery([
+    'userData.getAlbumSongs',
+    { albumId: id },
+  ])
+
+  console.log(songData)
+
   const { data: userData, isSuccess: userIsSuccess } = trpc.useQuery([
     'userData.profile',
     { userId: user },
@@ -42,14 +49,16 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
               </div>
             </div>
           </div>
-          {albumData.tracks.items.map((track: AlbumTrack) => (
-            <div key={track.id}>
-              <p>{track.name}</p>
-              {/* <button className='btn btn-small btn-primary' onClick={() => console.log(track.id)}>
+          {songData &&
+            songData?.tracks.length > 0 &&
+            songData.tracks.map((track: any) => (
+              <div key={track.id}>
+                <p>{track.name}</p>
+                {/* <button className='btn btn-small btn-primary' onClick={() => console.log(track.id)}>
                 ♥
               </button> */}
-            </div>
-          ))}
+              </div>
+            ))}
         </div>
       )}
     </>
