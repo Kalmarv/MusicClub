@@ -9,6 +9,7 @@ import { trpc } from '../utils/trpc'
 
 const Home: NextPage = () => {
   const { data, isSuccess, isError, isLoading } = trpc.useQuery(['auth.getSession'])
+  const { data: userAlbums } = trpc.useQuery(['userData.getAddedAlbums'])
 
   const {
     id,
@@ -19,8 +20,11 @@ const Home: NextPage = () => {
       <>
         <Header name={name} picture={image} />
         <AddAlbum />
-        <AlbumCard id={'1ERrUvG31thFCxdwWUoJrY'} expanded={true} />
-        <AlbumCard id={'1ERrUvG31thFCxdwWUoJrY'} />
+        <div className='grid gap-16 mt-8'>
+          {userAlbums &&
+            userAlbums.length > 0 &&
+            userAlbums.map((album) => <AlbumCard key={album.id} id={album.spotifyId} />)}
+        </div>
       </>
     )
   }

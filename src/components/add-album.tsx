@@ -6,6 +6,11 @@ import Image from 'next/image'
 const AddAlbum = () => {
   const { invalidateQueries } = trpc.useContext()
   const [albums, setAlbums] = useState<AlbumItem[]>()
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  const addAlbumToDb = trpc.useMutation(['spotify.addAlbum'], {
+    onSuccess: () => invalidateQueries(['userData.getAddedAlbums']),
+  })
 
   const albumResults = trpc.useMutation(['spotify.getSongs'], {
     onSuccess: (data) => setAlbums(data.albums.items),
@@ -21,12 +26,23 @@ const AddAlbum = () => {
     albumResults.mutate({ searchParam: value })
   }
 
+  const addAlbum = async (album: AlbumItem) => {
+    addAlbumToDb.mutate({ spotifyId: album.id })
+    setModalIsOpen(false)
+  }
+
   return (
     <>
       <label htmlFor='my-modal' className='btn btn-secondary mx-4'>
         Add Album
       </label>
-      <input type='checkbox' id='my-modal' className='modal-toggle' />
+      <input
+        type='checkbox'
+        id='my-modal'
+        className='modal-toggle'
+        checked={modalIsOpen}
+        onClick={() => setModalIsOpen(true)}
+      />
       <div className='modal'>
         <div className='modal-box'>
           <h3 className='font-bold text-lg'>Seach for Album</h3>
@@ -41,7 +57,7 @@ const AddAlbum = () => {
             albums.map((albums) => (
               <div
                 key={albums.id}
-                className='flex flex-row w-full h-20 rounded text-primary-content place-content-start mt-4'>
+                className='flex flex-row w-full h-20 rounded text-primary-content justify-between mt-4'>
                 <div className='relative aspect-square'>
                   <Image
                     src={albums.images[1]?.url as string}
@@ -50,16 +66,21 @@ const AddAlbum = () => {
                     layout='fill'
                   />
                 </div>
-                <div className='mx-2'>
+                <div className='mx-4 mt-2 w-full'>
                   <h1 className='font-bold'>{albums.name}</h1>
                   <h2>{albums.artists.map((artist) => artist.name).join(', ')}</h2>
                 </div>
+                <button
+                  className='btn btn-sm rounded-full btn-secondary place-self-center'
+                  onClick={() => addAlbum(albums)}>
+                  Add
+                </button>
               </div>
             ))}
           <div className='modal-action'>
-            <label htmlFor='my-modal' className='btn btn-primary'>
+            <button className='btn btn-primary' onClick={() => setModalIsOpen(false)}>
               close
-            </label>
+            </button>
           </div>
         </div>
       </div>
