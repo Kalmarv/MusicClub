@@ -64,17 +64,20 @@ export const spotifyRouter = createRouter()
       tracks: z.array(z.string().min(1)).min(1),
     }),
     async resolve({ ctx: { prisma, session }, input }) {
+      const trackData = input.tracks.map((track) => ({
+        spotifyID: track,
+      }))
+
       await prisma.album.create({
         data: {
           spotifyId: input.spotifyId,
           userId: session?.id as string,
+          tracks: {
+            createMany: {
+              data: [...trackData],
+            },
+          },
         },
-      })
-
-      await prisma.track.createMany({
-        data: input.tracks.map((track) => ({
-          trackId: track as string,
-        })),
       })
 
       return
