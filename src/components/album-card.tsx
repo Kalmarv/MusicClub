@@ -42,6 +42,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
             </a>
           </div>
           <div className='mt-4' />
+
           <div className='flex flex-row place-content-between w-full'>
             <div>
               <h1 className='font-bold text-2xl'>{albumData.name}</h1>
@@ -49,6 +50,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                 {albumData.artists.map((artist: any) => artist.name).join(', ')}
               </h2>
             </div>
+
             <div className='tooltip tooltip-primary' data-tip={userData?.name}>
               <div className='w-14 h-14 m-2'>
                 <div className='relative aspect-square'>
@@ -118,13 +120,15 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                 </div>
               </div>
             ))}
-          <button
-            className='btn btn-primary'
-            onClick={() => {
-              deleteAlbum.mutate({ albumId: albumData.id })
-            }}>
-            delete album
-          </button>
+          {(userData?.id === session?.id || session?.user?.name === 'Kalmarv') /* :) */ && (
+            <button
+              className='btn btn-primary mt-2'
+              onClick={() => {
+                deleteAlbum.mutate({ albumId: albumData.id })
+              }}>
+              Delete Album
+            </button>
+          )}
         </div>
       )}
     </>
