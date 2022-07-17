@@ -19,7 +19,6 @@ const Home: NextPage = () => {
   if (isSuccess && name) {
     return (
       <>
-        <HTMLHead />
         <Header name={name} picture={image} />
         <AddAlbum />
         <div className='flex flex-row place-content-center'>
