@@ -66,11 +66,10 @@ model Album {
 }
 
 model Track {
-    id        String  @id @unique @default(cuid())
-    Album     Album   @relation(fields: [albumId], references: [id])
-    spotifyID String  @unique
-    fav       User?   @relation(fields: [userId], references: [id])
+    id        String @id @unique @default(cuid())
+    Album     Album  @relation(fields: [albumId], references: [id])
+    spotifyID String @unique
+    fav       User[]
     albumId   String
     name      String
-    userId    String?
 }

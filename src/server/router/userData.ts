@@ -24,7 +24,9 @@ export const userDataRouter = createRouter()
     async resolve({ ctx: { prisma }, input }) {
       return await prisma.album.findUnique({
         where: { spotifyId: input.albumId },
-        select: { tracks: true },
+        select: {
+          tracks: { select: { name: true, albumId: true, id: true, spotifyID: true, fav: true } },
+        },
       })
     },
   })
