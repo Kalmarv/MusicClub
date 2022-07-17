@@ -17,15 +17,15 @@ const HTMLHead = (): JSX.Element => {
       <meta name='description' content={desc} />
       <link rel='canonical' href={siteURL} />
       <meta name='twitter:card' content={ogImageURL} />
-      <meta name='twitter:title' content='Ascent' />
+      <meta name='twitter:title' content={title} />
       <meta name='twitter:description' content={desc} />
       <meta name='twitter:image:src' content={ogImageURL} />
       <meta property='og:url' content={siteURL} />
-      <meta property='og:title' content='Ascent' />
+      <meta property='og:title' content={title} />
       <meta property='og:image' content={ogImageURL} />
       <meta property='og:description' content={desc} />
-      <meta property='og:site_name' content='Ascent' />
-      <meta itemProp='name' content='Ascent' />
+      <meta property='og:site_name' content={title} />
+      <meta itemProp='name' content={title} />
       <meta itemProp='description' content={desc} />
       <meta itemProp='image' content={ogImageURL} />
 
