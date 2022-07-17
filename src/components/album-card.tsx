@@ -4,13 +4,12 @@ import { trpc } from '../utils/trpc'
 
 const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
   const { invalidateQueries } = trpc.useContext()
+  const { data: session } = trpc.useQuery(['auth.getSession'])
   const { data: albumData, isSuccess: albumIsSuccess } = trpc.useQuery(['spotify.getAlbum', { id }])
   const { data: songData, isSuccess: songIsSuccess } = trpc.useQuery([
     'userData.getAlbumSongs',
     { albumId: id },
   ])
-
-  console.log(songData)
 
   const { data: userData, isSuccess: userIsSuccess } = trpc.useQuery([
     'userData.profile',
@@ -69,14 +68,14 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                 <p>{track.name}</p>
                 <button
                   onClick={() => {
-                    track.fav.map((fav: any) => fav.id).some((v: any) => userData?.id)
+                    track.fav.map((fav: any) => fav.id).some((v: any) => session?.id === v)
                       ? unFavoriteSong.mutate({ trackId: track.id })
                       : favoriteSong.mutate({ trackId: track.id })
                   }}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     className={`h-6 w-6 ${
-                      track.fav.map((fav: any) => fav.id).some((v: any) => userData?.id)
+                      track.fav.map((fav: any) => fav.id).some((v: any) => session?.id === v)
                         ? 'fill-primary'
                         : 'fill-transparent'
                     }`}
