@@ -121,13 +121,33 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
               </div>
             ))}
           {(userData?.id === session?.id || session?.user?.name === 'Kalmarv') /* :) */ && (
-            <button
-              className='btn btn-primary mt-2'
-              onClick={() => {
-                deleteAlbum.mutate({ albumId: albumData.id })
-              }}>
-              Delete Album
-            </button>
+            <>
+              <label htmlFor='delete-confirm' className='btn btn-primary mt-4 btn-sm'>
+                Delete Album
+              </label>
+              <input type='checkbox' id='delete-confirm' className='modal-toggle' />
+              <div className='modal'>
+                <div className='modal-box'>
+                  <h3 className='font-bold text-lg'>Are you sure?</h3>
+                  <p className='py-4'>
+                    This will delete the album and all of its songs. This action cannot be undone.
+                  </p>
+                  <div className='modal-action'>
+                    <label
+                      htmlFor='delete-confirm'
+                      className='btn btn-primary'
+                      onClick={() => {
+                        deleteAlbum.mutate({ albumId: albumData.id })
+                      }}>
+                      Yes
+                    </label>
+                    <label htmlFor='delete-confirm' className='btn'>
+                      Cancel
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </div>
       )}
