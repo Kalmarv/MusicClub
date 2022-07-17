@@ -64,3 +64,17 @@ export const userDataRouter = createRouter()
       })
     },
   })
+  .mutation('deleteAlbum', {
+    input: z.object({
+      albumId: z.string(),
+    }),
+    async resolve({ ctx: { prisma, session }, input }) {
+      await prisma.track.deleteMany({
+        where: { Album: { spotifyId: input.albumId } },
+      })
+
+      await prisma.album.delete({
+        where: { spotifyId: input.albumId },
+      })
+    },
+  })

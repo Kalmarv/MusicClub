@@ -67,7 +67,7 @@ model Album {
 
 model Track {
     id        String @id @unique @default(cuid())
-    Album     Album  @relation(fields: [albumId], references: [id])
+    Album     Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
     spotifyID String @unique
     fav       User[]
     albumId   String

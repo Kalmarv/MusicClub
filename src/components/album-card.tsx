@@ -23,6 +23,10 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
     onSuccess: () => invalidateQueries(['userData.getAlbumSongs']),
   })
 
+  const deleteAlbum = trpc.useMutation(['userData.deleteAlbum'], {
+    onSuccess: () => invalidateQueries(['userData.getAddedAlbums']),
+  })
+
   return (
     <>
       {albumIsSuccess && userIsSuccess && (
@@ -114,6 +118,13 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                 </div>
               </div>
             ))}
+          <button
+            className='btn btn-primary'
+            onClick={() => {
+              deleteAlbum.mutate({ albumId: albumData.id })
+            }}>
+            delete album
+          </button>
         </div>
       )}
     </>
