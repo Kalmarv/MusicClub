@@ -1,6 +1,5 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth'
-import SpotifyProvider from 'next-auth/providers/spotify'
-
+import DiscordProvider from 'next-auth/providers/discord'
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '../../../server/db/client'
@@ -10,9 +9,9 @@ export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
-    SpotifyProvider({
-      clientId: env.SPOTIFY_CLIENT_ID,
-      clientSecret: env.SPOTIFY_CLIENT_SECRET,
+    DiscordProvider({
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
   ],
   callbacks: {

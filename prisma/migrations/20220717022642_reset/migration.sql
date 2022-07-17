@@ -1,11 +1,4 @@
 -- CreateTable
-CREATE TABLE "Example" (
-    "id" TEXT NOT NULL,
-
-    CONSTRAINT "Example_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -53,11 +46,23 @@ CREATE TABLE "VerificationToken" (
 
 -- CreateTable
 CREATE TABLE "Album" (
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "id" TEXT NOT NULL,
     "spotifyId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "Album_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Track" (
+    "id" TEXT NOT NULL,
+    "spotifyID" TEXT NOT NULL,
+    "albumId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "userId" TEXT,
+
+    CONSTRAINT "Track_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -78,6 +83,12 @@ CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationTok
 -- CreateIndex
 CREATE UNIQUE INDEX "Album_spotifyId_key" ON "Album"("spotifyId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Track_id_key" ON "Track"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Track_spotifyID_key" ON "Track"("spotifyID");
+
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -86,3 +97,9 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Album" ADD CONSTRAINT "Album_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Track" ADD CONSTRAINT "Track_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Track" ADD CONSTRAINT "Track_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

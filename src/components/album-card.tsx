@@ -22,8 +22,6 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
     onSuccess: () => invalidateQueries(['userData.getAlbumSongs']),
   })
 
-  console.log(songData)
-
   return (
     <>
       {albumIsSuccess && userIsSuccess && (
@@ -63,7 +61,9 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
           {songData &&
             songData?.tracks.length > 0 &&
             songData.tracks.map((track: any) => (
-              <div key={track.id} className='flex justify-between w-full my-1'>
+              <div
+                key={track.id}
+                className='flex justify-between w-full py-1 px-2 rounded-md hover:bg-base-200'>
                 <p>{track.name}</p>
                 <button
                   onClick={() => {

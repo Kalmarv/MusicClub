@@ -7,6 +7,8 @@ const envSchema = z.object({
   NEXTAUTH_URL: z.string().url(),
   SPOTIFY_CLIENT_ID: z.string(),
   SPOTIFY_CLIENT_SECRET: z.string(),
+  DISCORD_CLIENT_ID: z.string(),
+  DISCORD_CLIENT_SECRET: z.string(),
 })
 
 module.exports.envSchema = envSchema

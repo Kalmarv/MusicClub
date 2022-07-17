@@ -4,7 +4,7 @@ const { env } = require('./src/server/env')
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['i.scdn.co'],
+    domains: ['i.scdn.co', 'cdn.discordapp.com'],
   },
 }
 
