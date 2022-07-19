@@ -11,6 +11,8 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
     { albumId: id },
   ])
 
+  console.log()
+
   const { data: userData, isSuccess: userIsSuccess } = trpc.useQuery([
     'userData.profile',
     { userId: user },
@@ -73,26 +75,33 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                 className='flex justify-between w-full py-1 px-2 rounded-md hover:bg-base-200'>
                 <p>{track.name}</p>
                 <div className='flex'>
-                  {track.fav
-                    .filter((fav: any) => fav.id !== session?.id)
-                    .map((fav: any) => (
-                      <div className='tooltip tooltip-primary' data-tip={fav.name} key={fav.id}>
-                        <svg
-                          key={fav.id}
-                          xmlns='http://www.w3.org/2000/svg'
-                          className='h-6 w-6 fill-primary'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          stroke='currentColor'
-                          strokeWidth={2}>
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
-                          />
-                        </svg>
-                      </div>
-                    ))}
+                  {track.fav.length > 0 && (
+                    <div
+                      className='tooltip tooltip-primary tooltip-left flex'
+                      data-tip={
+                        track.fav.map((fav: any) => fav.name).length < 6
+                          ? track.fav.map((fav: any) => fav.name).join(', ')
+                          : track.fav
+                              .map((fav: any) => fav.name)
+                              .splice(0, 5)
+                              .join(', ') +
+                            ` and ${track.fav.map((fav: any) => fav.name).length - 5} others`
+                      }>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        className='h-6 w-6 fill-primary'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        stroke='currentColor'
+                        strokeWidth={2}>
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
+                        />
+                      </svg>
+                    </div>
+                  )}
                   <button
                     onClick={() => {
                       track.fav.map((fav: any) => fav.id).some((v: any) => session?.id === v)

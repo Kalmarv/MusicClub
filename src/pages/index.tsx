@@ -1,10 +1,8 @@
 import type { NextPage } from 'next'
 import { signIn } from 'next-auth/react'
-import Head from 'next/head'
 import AddAlbum from '../components/add-album'
 import AlbumCard from '../components/album-card'
 import Header from '../components/header'
-import HTMLHead from '../components/html-head'
 import { UserData } from '../types'
 import { trpc } from '../utils/trpc'
 
