@@ -3,7 +3,7 @@ const HTMLHead = (): JSX.Element => {
   const desc = 'A community for music lovers to share their favorite albums and listen to others'
   const ogImgRelativePath = '/og.png'
 
-  const siteURL = 'https://listen.kv7.dev'
+  const siteURL = 'https://club.kv7.dev'
   const ogImageURL = `${siteURL}${ogImgRelativePath}`
 
   return (
