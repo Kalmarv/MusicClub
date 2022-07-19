@@ -72,7 +72,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
             songData.tracks.map((track: any) => (
               <div
                 key={track.id}
-                className='flex justify-between w-full py-1 px-2 rounded-md hover:bg-base-200'>
+                className='flex justify-between w-full py-1 px-2 rounded-md hover:bg-base-200 flex-grow-0'>
                 <p>{track.name}</p>
                 <div className='flex'>
                   {track.fav.length > 0 && (
@@ -103,6 +103,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                     </div>
                   )}
                   <button
+                    className='flex'
                     onClick={() => {
                       track.fav.map((fav: any) => fav.id).some((v: any) => session?.id === v)
                         ? unFavoriteSong.mutate({ trackId: track.id })
