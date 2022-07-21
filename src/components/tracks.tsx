@@ -2,11 +2,16 @@ import { trpc } from '../utils/trpc'
 import LikeButton from './like-button'
 
 const Tracks: React.FC<{ albumId: string }> = ({ albumId }) => {
-  const { data: songData, isSuccess } = trpc.useQuery(['userData.getAlbumSongs', { albumId }])
+  const { data: songData } = trpc.useQuery(['userData.getAlbumSongs', { albumId }])
 
-  if (!songData) {
-    return null
+  const getDataTip = (track: any) => {
+    const trackFavs = track.fav.map((fav: any) => fav.name)
+    if (trackFavs.length < 6) return trackFavs.join(', ')
+    const tooltip = trackFavs.slice(0, 5).join(', ') + ` and ${trackFavs.length - 5} others`
+    return tooltip
   }
+
+  if (!songData) return null
 
   return (
     <>
@@ -19,15 +24,7 @@ const Tracks: React.FC<{ albumId: string }> = ({ albumId }) => {
             {track.fav.length > 0 && (
               <div
                 className='tooltip tooltip-primary tooltip-left flex'
-                data-tip={
-                  track.fav.map((fav: any) => fav.name).length < 6
-                    ? track.fav.map((fav: any) => fav.name).join(', ')
-                    : track.fav
-                        .map((fav: any) => fav.name)
-                        .splice(0, 5)
-                        .join(', ') +
-                      ` and ${track.fav.map((fav: any) => fav.name).length - 5} others`
-                }>
+                data-tip={getDataTip(track)}>
                 <p className='mr-1'>{`x${track.fav.length}`}</p>
               </div>
             )}
