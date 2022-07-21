@@ -26,3 +26,4 @@ export type InferQueryOutput<TRouteKey extends TQuery> = inferProcedureOutput<
 >
 
 export type SongData = InferQueryOutput<'userData.getAlbumSongs'>
+export type UserProfile = InferQueryOutput<'userData.profile'>
