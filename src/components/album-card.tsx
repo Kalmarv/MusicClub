@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import { AlbumTrack } from '../types'
-import { trpc } from '../utils/trpc'
+import { SongData, trpc } from '../utils/trpc'
 import DeleteAlbum from './delete-album-modal'
+import LikeButton from './like-button'
 
 const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
   const { invalidateQueries } = trpc.useContext()
-  const { data: session } = trpc.useQuery(['auth.getSession'])
   const { data: albumData, isSuccess: albumIsSuccess } = trpc.useQuery(['spotify.getAlbum', { id }])
   const { data: songData, isSuccess: songIsSuccess } = trpc.useQuery([
     'userData.getAlbumSongs',
@@ -18,13 +18,6 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
     'userData.profile',
     { userId: user },
   ])
-
-  const favoriteSong = trpc.useMutation(['userData.favoriteTrack'], {
-    onSuccess: () => invalidateQueries(['userData.getAlbumSongs']),
-  })
-  const unFavoriteSong = trpc.useMutation(['userData.unFavoriteTrack'], {
-    onSuccess: () => invalidateQueries(['userData.getAlbumSongs']),
-  })
 
   return (
     <>
@@ -66,7 +59,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
           <div className='mt-4' />
           {songData &&
             songData?.tracks.length > 0 &&
-            songData.tracks.map((track: any) => (
+            songData.tracks.map((track) => (
               <div
                 key={track.id}
                 className='flex justify-between w-full py-1 px-2 rounded-md hover:bg-base-200 flex-grow-0'>
@@ -87,30 +80,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
                       <p className='mr-1'>{`x${track.fav.length}`}</p>
                     </div>
                   )}
-                  <button
-                    className='flex'
-                    onClick={() => {
-                      track.fav.map((fav: any) => fav.id).some((v: any) => session?.id === v)
-                        ? unFavoriteSong.mutate({ trackId: track.id })
-                        : favoriteSong.mutate({ trackId: track.id })
-                    }}>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className={`h-6 w-6 ${
-                        track.fav.map((fav: any) => fav.id).some((v: any) => session?.id === v)
-                          ? 'fill-primary stroke-black'
-                          : 'fill-transparent stroke-slate-700 hover:stroke-black'
-                      }`}
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth={2}>
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
-                      />
-                    </svg>
-                  </button>
+                  <LikeButton track={track} />
                 </div>
               </div>
             ))}

@@ -24,3 +24,5 @@ export type TSubscription = keyof AppRouter['_def']['subscriptions']
 export type InferQueryOutput<TRouteKey extends TQuery> = inferProcedureOutput<
   AppRouter['_def']['queries'][TRouteKey]
 >
+
+export type SongData = InferQueryOutput<'userData.getAlbumSongs'>
