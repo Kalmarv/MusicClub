@@ -3,31 +3,24 @@ import { signIn } from 'next-auth/react'
 import AddAlbum from '../components/add-album'
 import AlbumCard from '../components/album-card'
 import Header from '../components/header'
-import { UserData } from '../types'
 import { trpc } from '../utils/trpc'
 
 const Home: NextPage = () => {
-  const { data, isSuccess, isError, isLoading } = trpc.useQuery(['auth.getSession'])
+  const { data: session, isSuccess, isLoading } = trpc.useQuery(['auth.getSession'])
   const { data: userAlbums } = trpc.useQuery(['userData.getAddedAlbums'])
 
-  const {
-    id,
-    user: { image, name },
-  } = (data as unknown as UserData) ?? { id: null, user: { image: null, name: null } }
-  if (isSuccess && name) {
+  if (session && userAlbums) {
     return (
       <>
-        <Header name={name} picture={image} />
+        <Header name={session.user!.name!} picture={session.user!.image!} />
         <AddAlbum />
         <div className='flex flex-row place-content-center'>
           <div className='grid gap-8 my-8 w-full max-w-lg md:max-w-5xl md:grid-cols-2'>
-            {userAlbums &&
-              userAlbums.length > 0 &&
-              userAlbums
-                .sort((a, b) => Number(b.date) - Number(a.date))
-                .map((album) => (
-                  <AlbumCard key={album.id} id={album.spotifyId} user={album.userId} />
-                ))}
+            {userAlbums
+              .sort((a, b) => Number(b.date) - Number(a.date))
+              .map((album) => (
+                <AlbumCard key={album.id} id={album.spotifyId} user={album.userId} />
+              ))}
           </div>
         </div>
       </>

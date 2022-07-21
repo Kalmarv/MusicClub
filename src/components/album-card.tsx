@@ -16,7 +16,7 @@ const AlbumCard: React.FC<{ id: string; user: string }> = ({ id, user }) => {
       <AlbumCover user={userData} albumId={id} />
       <div className='mt-4' />
       <Tracks albumId={id} />
-      <DeleteAlbum albumId={albumData.id} userId={userData?.id as string} />
+      <DeleteAlbum albumId={albumData.id} userId={userData.id} />
     </div>
   )
 }
