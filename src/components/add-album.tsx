@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { LegacyRef, RefObject, useState } from 'react'
 import { AlbumItem, Albums } from '../types'
 import { trpc } from '../utils/trpc'
 import Image from 'next/image'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const AddAlbum = () => {
   const { invalidateQueries } = trpc.useContext()
   const [albums, setAlbums] = useState<AlbumItem[]>()
   const [tracks, setAlbumTracks] = useState<string[]>()
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [animationParent] = useAutoAnimate()
 
   const addAlbumToDb = trpc.useMutation(['spotify.addAlbum'], {
     onSuccess: () => invalidateQueries(['userData.getAddedAlbums']),
@@ -62,31 +64,33 @@ const AddAlbum = () => {
             className='input input-bordered border-2 input-secondary w-full mt-4'
             onChange={(e) => handleInput(e)}></input>
           <div className='mt-4' />
-          {albums &&
-            albums.length > 0 &&
-            albums.map((albums) => (
-              <div
-                key={albums.id}
-                className='flex flex-row w-full h-20 rounded text-primary-content justify-between mt-4'>
-                <div className='relative aspect-square'>
-                  <Image
-                    src={albums.images[1]?.url as string}
-                    alt='album cover'
-                    className='rounded'
-                    layout='fill'
-                  />
+          <div ref={animationParent as LegacyRef<HTMLDivElement>}>
+            {albums &&
+              albums.length > 0 &&
+              albums.map((albums) => (
+                <div
+                  key={albums.id}
+                  className='flex flex-row w-full h-20 rounded text-primary-content justify-between mt-4'>
+                  <div className='relative aspect-square'>
+                    <Image
+                      src={albums.images[1]?.url as string}
+                      alt='album cover'
+                      className='rounded'
+                      layout='fill'
+                    />
+                  </div>
+                  <div className='mx-4 mt-2 w-full'>
+                    <h1 className='font-bold'>{albums.name}</h1>
+                    <h2>{albums.artists.map((artist) => artist.name).join(', ')}</h2>
+                  </div>
+                  <button
+                    className='btn btn-sm rounded-full btn-secondary place-self-center'
+                    onClick={() => addAlbum(albums)}>
+                    Add
+                  </button>
                 </div>
-                <div className='mx-4 mt-2 w-full'>
-                  <h1 className='font-bold'>{albums.name}</h1>
-                  <h2>{albums.artists.map((artist) => artist.name).join(', ')}</h2>
-                </div>
-                <button
-                  className='btn btn-sm rounded-full btn-secondary place-self-center'
-                  onClick={() => addAlbum(albums)}>
-                  Add
-                </button>
-              </div>
-            ))}
+              ))}
+          </div>
           <div className='modal-action'>
             <button className='btn btn-primary' onClick={() => setModalIsOpen(false)}>
               close
