@@ -1,8 +1,38 @@
-import { LegacyRef, RefObject, useState } from 'react'
+import { LegacyRef, RefObject, useEffect, useRef, useState } from 'react'
 import { AlbumItem, Albums } from '../types'
 import { trpc } from '../utils/trpc'
 import Image from 'next/image'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+
+// Hook - https://usehooks.com/useKeyPress/
+const useKeyPress = (targetKey: string): boolean => {
+  // State for keeping track of whether key is pressed
+  const [keyPressed, setKeyPressed] = useState(false)
+  // If pressed key is our target key then set to true
+  function downHandler({ key }: { key: any }): void {
+    if (key === targetKey) {
+      setKeyPressed(true)
+    }
+  }
+  // If released key is our target key then set to false
+  const upHandler = ({ key }: { key: any }): void => {
+    if (key === targetKey) {
+      setKeyPressed(false)
+    }
+  }
+  // Add event listeners
+  useEffect(() => {
+    window.addEventListener('keydown', downHandler)
+    window.addEventListener('keyup', upHandler)
+    // Remove event listeners on cleanup
+    return () => {
+      window.removeEventListener('keydown', downHandler)
+      window.removeEventListener('keyup', upHandler)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Empty array ensures that effect is only run on mount and unmount
+  return keyPressed
+}
 
 const AddAlbum = () => {
   const { invalidateQueries } = trpc.useContext()
@@ -10,6 +40,7 @@ const AddAlbum = () => {
   const [tracks, setAlbumTracks] = useState<string[]>()
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [animationParent] = useAutoAnimate()
+  const escapePressed = useKeyPress('Escape')
 
   const addAlbumToDb = trpc.useMutation(['spotify.addAlbum'], {
     onSuccess: () => invalidateQueries(['userData.getAddedAlbums']),
@@ -42,6 +73,12 @@ const AddAlbum = () => {
     addAlbumToDb.mutate({ spotifyId: album.id, tracks: tracks })
     setModalIsOpen(false)
   }
+
+  useEffect(() => {
+    if (escapePressed) {
+      setModalIsOpen(false)
+    }
+  }, [escapePressed])
 
   return (
     <>
