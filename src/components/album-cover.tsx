@@ -2,10 +2,7 @@ import Image from 'next/image'
 import { trpc, UserProfile } from '../utils/trpc'
 
 const AlbumCover: React.FC<{ user: UserProfile; albumId: string }> = ({ user, albumId }) => {
-  const { data: albumData, isSuccess: albumIsSuccess } = trpc.useQuery([
-    'spotify.getAlbum',
-    { id: albumId },
-  ])
+  const { data: albumData, isFetching } = trpc.useQuery(['spotify.getAlbum', { id: albumId }])
 
   return (
     <>
@@ -16,6 +13,7 @@ const AlbumCover: React.FC<{ user: UserProfile; albumId: string }> = ({ user, al
             alt={albumData.name}
             layout='fill'
             className='rounded-lg'
+            priority={true}
           />
         </a>
       </div>

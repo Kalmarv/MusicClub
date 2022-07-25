@@ -1,8 +1,27 @@
 import { trpc } from '../utils/trpc'
 import LikeButton from './like-button'
 
+const TrackSkeleton = () => {
+  return (
+    <>
+      <div className='w-full mx-auto'>
+        <div className='flex animate-pulse flex-row items-center h-full space-x-5'>
+          <div className='flex flex-col space-y-3'>
+            <div className='w-36 bg-base-300 h-6 rounded-md' />
+            <div className='w-24 bg-base-300 h-6 rounded-md' />
+            <div className='w-40 bg-base-300 h-6 rounded-md' />
+            <div className='w-20 bg-base-300 h-6 rounded-md' />
+            <div className='w-32 bg-base-300 h-6 rounded-md' />
+            <div className='w-28 bg-base-300 h-6 rounded-md' />
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
 const Tracks: React.FC<{ albumId: string }> = ({ albumId }) => {
-  const { data: songData } = trpc.useQuery(['userData.getAlbumSongs', { albumId }])
+  const { data: songData, isFetching } = trpc.useQuery(['userData.getAlbumSongs', { albumId }])
 
   const getDataTip = (track: any) => {
     const trackFavs = track.fav.map((fav: any) => fav.name)
@@ -11,7 +30,7 @@ const Tracks: React.FC<{ albumId: string }> = ({ albumId }) => {
     return tooltip
   }
 
-  if (!songData) return null
+  if ((isFetching && !songData) || !songData) return <TrackSkeleton />
 
   return (
     <>
