@@ -79,7 +79,7 @@ const LikeButton: React.FC<{ track: any }> = ({ track }) => {
     }
   }
 
-  const [clickAnimation, trigger] = useBoop({ rotation: 15 })
+  const [clickAnimation, trigger] = useBoop({ rotation: 15, scale: 1.1 })
 
   return (
     <button className='flex' onClick={() => handleLike()}>
