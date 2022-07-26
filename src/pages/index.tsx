@@ -6,8 +6,8 @@ import Header from '../components/header'
 import { trpc } from '../utils/trpc'
 
 const Home: NextPage = () => {
-  const { data: session, isSuccess, isLoading } = trpc.useQuery(['auth.getSession'])
-  const { data: userAlbums } = trpc.useQuery(['userData.getAddedAlbums'])
+  const { data: session, isSuccess, isLoading: sessionLoading } = trpc.useQuery(['auth.getSession'])
+  const { data: userAlbums, isLoading: albumsLoading } = trpc.useQuery(['userData.getAddedAlbums'])
 
   if (session && userAlbums) {
     return (
@@ -27,7 +27,7 @@ const Home: NextPage = () => {
     )
   }
 
-  if (isLoading) {
+  if (sessionLoading || albumsLoading) {
     return (
       <div className='flex justify-center h-screen flex-col'>
         <h1 className='text-center font-bold text-2xl'>Loading ...</h1>

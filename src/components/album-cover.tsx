@@ -1,12 +1,54 @@
+import { useSpring, animated } from '@react-spring/web'
 import Image from 'next/image'
+import { MouseEventHandler, MutableRefObject, useRef } from 'react'
 import { trpc, UserProfile } from '../utils/trpc'
+
+const calc = (x: number, y: number, rect: DOMRect) => [
+  -(y - rect.top - rect.height / 2) / 50,
+  (x - rect.left - rect.width / 2) / 50,
+  1,
+]
+
+const trans = (x: number, y: number, s: number) =>
+  `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
 
 const AlbumCover: React.FC<{ user: UserProfile; albumId: string }> = ({ user, albumId }) => {
   const { data: albumData, isFetching } = trpc.useQuery(['spotify.getAlbum', { id: albumId }])
+  const coverRef = useRef<HTMLDivElement>(null)
+
+  const config = {
+    mass: 1,
+    tension: 170,
+    friction: 26,
+    clamp: false,
+    precision: 0.01,
+    velocity: 0,
+  }
+
+  const [{ xys }, api] = useSpring(() => ({ xys: [0, 0, 1], config }), [config])
+
+  const handleMouseLeave = () =>
+    api.start({
+      xys: [0, 0, 1],
+    })
+
+  const handleMouseMove = (event: React.MouseEvent) => {
+    if (coverRef.current) {
+      const rect: DOMRect = coverRef.current.getBoundingClientRect()
+      api.start({
+        xys: calc(event.clientX, event.clientY, rect),
+      })
+    }
+  }
 
   return (
     <>
-      <div className='relative aspect-square w-full max-w-md place-self-center'>
+      <animated.div
+        className='relative aspect-square w-full max-w-md place-self-center'
+        ref={coverRef}
+        style={{ transform: xys.to(trans) }}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={handleMouseMove}>
         <a href={albumData.uri}>
           <Image
             src={albumData.images[0].url}
@@ -16,7 +58,7 @@ const AlbumCover: React.FC<{ user: UserProfile; albumId: string }> = ({ user, al
             priority={true}
           />
         </a>
-      </div>
+      </animated.div>
       <div className='mt-4' />
 
       <div className='flex flex-row place-content-between w-full'>

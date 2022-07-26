@@ -44,7 +44,7 @@ const Tracks: React.FC<{ albumId: string }> = ({ albumId }) => {
               <div
                 className='tooltip tooltip-primary tooltip-left flex'
                 data-tip={getDataTip(track)}>
-                <p className='mr-1'>{`x${track.fav.length}`}</p>
+                <p className='mr-1'>{`${track.fav.length}`}</p>
               </div>
             )}
             <LikeButton track={track} />
